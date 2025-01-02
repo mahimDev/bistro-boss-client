@@ -6,6 +6,7 @@ const FoodCart = ({ food }) => {
             <div className="card bg-base-100/30 image-full  shadow-xl">
                 <figure>
                     <img
+                        className="w-full"
                         src={image}
                         alt="dessert image" />
                 </figure>

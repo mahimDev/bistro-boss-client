@@ -7,8 +7,9 @@ const NavBer = () => {
     const nav = <>
         <NavLink to={'/'}> <li>Home</li></NavLink>
         <NavLink to={'menu'}><li>Our Menu</li></NavLink>
-        <NavLink to={'order'}><li>Order</li></NavLink>
-        <NavLink to={'/'}><li>About-us</li></NavLink>
+        <NavLink to={'order/dessert'}><li>Order</li></NavLink>
+        <NavLink to={'login'}><li>Login</li></NavLink>
+        <NavLink to={'register'}><li>Register</li></NavLink>
 
     </>
     // const handleLogout = () => {

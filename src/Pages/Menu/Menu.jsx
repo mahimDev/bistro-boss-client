@@ -7,12 +7,7 @@ import useMenu from "../../Hooks/useMenu";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import MenuCategory from "./MenuCategory/MenuCategory";
 
-// 
-// 
-// https://i.ibb.co.com/jL3NC2v/menu-bg.png
-// 
-// 
-// 
+
 const Menu = () => {
     const [menu] = useMenu()
     const offered = menu.filter(item => item.category === "offered")
@@ -40,50 +35,32 @@ const Menu = () => {
             </div>
             {/* dessert section */}
             <div className="mt-14">
-                <CoverSection
+                <MenuCategory
                     img={'https://i.ibb.co.com/N1YMwQ8/dessert-bg.jpg'}
                     title={'dessert'}
-                    p={'dessert is to much sweet'}
-                ></CoverSection>
-                <div className="mt-10">
-                    <MenuCategory data={dessert}></MenuCategory>
-                </div>
+                    data={dessert}></MenuCategory>
             </div>
             {/* pizza section */}
             <div className="mt-14">
-                <CoverSection
+                <MenuCategory
                     img={'https://i.ibb.co.com/s1LHKLp/pizza-bg.jpg'}
                     title={'Pizza'}
-                    p={'pizza is to much '}
-                ></CoverSection>
-                <div className="mt-10">
-                    <MenuCategory data={pizza}></MenuCategory>
-                </div>
+                    data={pizza}></MenuCategory>
             </div>
             {/* salad section */}
             <div className="mt-14">
-                <CoverSection
+                <MenuCategory
                     img={'https://i.ibb.co.com/Fg7Q97P/salad-bg.jpg'}
                     title={'salad'}
-                    p={'salad is to much '}
-                ></CoverSection>
-                <div className="mt-10">
-                    <MenuCategory data={salad}></MenuCategory>
-                </div>
+                    data={salad}></MenuCategory>
             </div>
             {/* soup section */}
             <div className="mt-14">
-                <CoverSection
+                <MenuCategory
                     img={'https://i.ibb.co.com/GdY5s94/soup-bg.jpg'}
                     title={'soup'}
-                    p={'soup is to much '}
-                ></CoverSection>
-                <div className="mt-10">
-                    <MenuCategory data={soup}></MenuCategory>
-                </div>
+                    data={soup}></MenuCategory>
             </div>
-
-
         </div>
     );
 };
