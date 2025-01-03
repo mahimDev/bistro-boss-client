@@ -17,7 +17,7 @@ const Order = () => {
     const soup = menu.filter(item => item.category === "soup")
     const salad = menu.filter(item => item.category === "salad")
     const pizza = menu.filter(item => item.category === "pizza")
-    console.log(menu)
+    // console.log(menu)
     return (
         <div>
             <CoverSection

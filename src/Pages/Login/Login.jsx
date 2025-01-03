@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
+import useAuth from "../../Hooks/useAuth";
+import { toast, ToastContainer } from "react-toastify";
 const Login = () => {
+    const { user, loginUser, } = useAuth()
+    const navigate = useNavigate()
     const captchaRef = useRef(null)
     const [disable, setDisable] = useState(true)
     useEffect(() => {
@@ -12,6 +16,15 @@ const Login = () => {
         const form = new FormData(e.target)
         const email = form.get('email')
         const password = form.get('password')
+        loginUser(email, password)
+            .then(res => {
+                navigate('/')
+                toast.success('Login successful')
+                console.log(res.user)
+            })
+            .catch(err => {
+                console.log(err)
+            })
         console.log(email, password)
     }
     const handleValidation = () => {
@@ -23,6 +36,7 @@ const Login = () => {
     }
     return (
         <div className="flex justify-center">
+            <ToastContainer />
             <div className=" mt-28 shadow-2xl shadow-[#53492a8e] w-fit p-10 rounded-md">
                 <form
                     onSubmit={handleLogin}

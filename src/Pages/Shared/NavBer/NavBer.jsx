@@ -1,27 +1,30 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import useAuth from "../../../Hooks/useAuth";
+import { toast } from "react-toastify";
 
 const NavBer = () => {
-    const user = true
+    const { user, signOutUser } = useAuth()
     const [open, setOpen] = useState(false)
+
     const nav = <>
         <NavLink to={'/'}> <li>Home</li></NavLink>
         <NavLink to={'menu'}><li>Our Menu</li></NavLink>
         <NavLink to={'order/dessert'}><li>Order</li></NavLink>
-        <NavLink to={'login'}><li>Login</li></NavLink>
-        <NavLink to={'register'}><li>Register</li></NavLink>
+        {/* <NavLink to={'login'}><li>Login</li></NavLink> */}
+        {/* <NavLink to={'register'}><li>Register</li></NavLink> */}
 
     </>
-    // const handleLogout = () => {
-    //     signOutUser()
-    //         .then(() => {
+    const handleLogout = () => {
+        signOutUser()
+            .then(() => {
 
-    //             toast.success('logout successfully')
-    //         })
-    //         .catch(() => {
+                toast.success('logout successfully')
+            })
+            .catch(() => {
 
-    //         })
-    // }
+            })
+    }
     return (
 
         <div className="top-0  z-[500] md:w-11/12 mx-auto  fixed md:rounded-full  text-gray-300 bg-darkGray/45   py-4 ">
@@ -68,8 +71,8 @@ const NavBer = () => {
                                     <h1 className="my-2">{'user?.email'}</h1>
                                     <button
 
-                                        // onClick={handleLogout}
-                                        className={`  border-2 border-black bg-darkGray text-lightGray
+                                        onClick={handleLogout}
+                                        className={`  border-2 border-black bg-black text-lightGray
                              py-1 px-3 font-semibold rounded-md `}
                                     >LogOut</button>
                                 </div>
@@ -77,10 +80,10 @@ const NavBer = () => {
                             :
 
                             <div className="flex gap-2">
-                                <Link to={'/login'}>
+                                <Link to={'login'}>
                                     <button className={`border-2 border-lightGray  py-1 px-3 font-semibold rounded-md $`}
                                     >Login</button></Link>
-                                <Link to={'/register'}>
+                                <Link to={'register'}>
                                     <button className={`border-2 border-lightGray  py-1 px-3 font-semibold rounded-md $`}
                                     >Register</button></Link>
                             </div>
