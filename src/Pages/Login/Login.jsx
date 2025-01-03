@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
 import useAuth from "../../Hooks/useAuth";
 import { toast, ToastContainer } from "react-toastify";
 const Login = () => {
     const { user, loginUser, } = useAuth()
     const navigate = useNavigate()
+    const location = useLocation()
+    // console.log(location.state)
     const captchaRef = useRef(null)
     const [disable, setDisable] = useState(true)
     useEffect(() => {
@@ -18,7 +20,7 @@ const Login = () => {
         const password = form.get('password')
         loginUser(email, password)
             .then(res => {
-                navigate('/')
+                navigate(location?.state || '/')
                 toast.success('Login successful')
                 console.log(res.user)
             })

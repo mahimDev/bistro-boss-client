@@ -4,15 +4,26 @@ import useAuth from "../../Hooks/useAuth";
 import { useForm } from "react-hook-form";
 
 const Register = () => {
+    const { user, createUser, updateUserProfile } = useAuth()
     const {
         register,
         handleSubmit,
+        reset,
         watch,
         formState: { errors },
     } = useForm()
     const onSubmit = (data) => {
         createUser(data.email, data.password)
             .then((res) => {
+                updateUserProfile(data.name, data.photo)
+                    .then(res => {
+                        console.log(res)
+                        toast.success('User update successful')
+                        reset()
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 console.log(res.user)
                 toast.success('Registration successful')
                 // navigate(state || "/")
@@ -25,7 +36,7 @@ const Register = () => {
 
     }
 
-    const { user, createUser } = useAuth()
+
     const navigate = useNavigate()
     const { state } = useLocation()
     const handleRegistration = e => {
@@ -128,7 +139,7 @@ const Register = () => {
                     <div className="flex items-center border-b-2 border-[#D4AF37] gap-2 my-10" >
                         <img className="w-8 h-7 " src="https://img.icons8.com/?size=100&id=2724&format=png&color=D4AF37" alt="" />
                         <input
-                            {...register('photoURL')}
+                            {...register('photo')}
                             className={`pl-3 pr-16 py-2 border-none `}
                             placeholder="photoURL"
                             type="text"

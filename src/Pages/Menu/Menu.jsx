@@ -44,7 +44,7 @@ const Menu = () => {
             <div className="mt-14">
                 <MenuCategory
                     img={'https://i.ibb.co.com/s1LHKLp/pizza-bg.jpg'}
-                    title={'Pizza'}
+                    title={'pizza'}
                     data={pizza}></MenuCategory>
             </div>
             {/* salad section */}

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 import { toast } from "react-toastify";
+import useCart from "../../../Hooks/useCart";
 
 const NavBer = () => {
     const { user, signOutUser } = useAuth()
     const [open, setOpen] = useState(false)
-
+    const [cart] = useCart()
+    console.log(cart)
     const nav = <>
         <NavLink to={'/'}> <li>Home</li></NavLink>
         <NavLink to={'menu'}><li>Our Menu</li></NavLink>
@@ -59,16 +61,20 @@ const NavBer = () => {
                     {
                         user ?
                             <div className="group relative">
-                                <img
-                                    width={500}
-                                    height={500}
-                                    className="size-12 rounded-full bg-slate-500 object-cover"
-                                    src={user?.photoURL}
-                                    alt="avatar GlobalGate"
-                                />
+                                <div className="flex gap-2 items-center">
+                                    <div className="badge badge-secondary">{cart?.length}</div>
+                                    <img
+                                        width={500}
+                                        height={500}
+                                        className="size-12 rounded-full bg-slate-500 object-cover"
+                                        src={user?.photoURL}
+                                        alt="avatar "
+                                    />
+                                </div>
+
                                 <div className={`group-hover:block hidden rounded-xl absolute right-0 top-12 p-5 bg-white/70 backdrop-blur-2xl text-darkGray`}>
-                                    <h1 className="mb-2">{'user?.displayName'}</h1>
-                                    <h1 className="my-2">{'user?.email'}</h1>
+                                    <h1 className="mb-2">{user?.displayName}</h1>
+                                    <h1 className="my-2">{user?.email}</h1>
                                     <button
 
                                         onClick={handleLogout}
