@@ -13,7 +13,7 @@ const NavBer = () => {
         <NavLink to={'/'}> <li>Home</li></NavLink>
         <NavLink to={'menu'}><li>Our Menu</li></NavLink>
         <NavLink to={'order/dessert'}><li>Order</li></NavLink>
-        {/* <NavLink to={'login'}><li>Login</li></NavLink> */}
+        <NavLink to={'/dashboard/cart'}><li>Dashboard</li></NavLink>
         {/* <NavLink to={'register'}><li>Register</li></NavLink> */}
 
     </>
