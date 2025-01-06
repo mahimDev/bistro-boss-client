@@ -8,7 +8,6 @@ const NavBer = () => {
     const { user, signOutUser } = useAuth()
     const [open, setOpen] = useState(false)
     const [cart] = useCart()
-    console.log(cart)
     const nav = <>
         <NavLink to={'/'}> <li>Home</li></NavLink>
         <NavLink to={'menu'}><li>Our Menu</li></NavLink>

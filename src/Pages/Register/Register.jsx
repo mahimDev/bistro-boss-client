@@ -2,9 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import useAuth from "../../Hooks/useAuth";
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const Register = () => {
-    const { user, createUser, updateUserProfile } = useAuth()
+    const { user, createUser, updateUserProfile, signInWithGoogle } = useAuth()
+    const axiosPublic = useAxiosPublic()
     const {
         register,
         handleSubmit,
@@ -15,23 +17,33 @@ const Register = () => {
     const onSubmit = (data) => {
         createUser(data.email, data.password)
             .then((res) => {
+                // update user name and phot url
                 updateUserProfile(data.name, data.photo)
                     .then(res => {
-                        console.log(res)
-                        toast.success('User update successful')
-                        reset()
+                        // create a new profile api in mongoDB
+                        const userInfo = {
+                            user_name: data.name,
+                            user_email: data.email,
+                            user_password: data.password
+                        }
+                        axiosPublic.post('/user', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    toast.success('User update successful')
+                                    reset()
+                                }
+                            })
+
                     })
-                    .catch(err => {
-                        console.log(err)
+                    .catch(() => {
                     })
-                console.log(res.user)
                 toast.success('Registration successful')
-                // navigate(state || "/")
+                navigate("/")
             })
             .catch(err => {
                 const massage = err.code
                 const split = massage.split('/')[1].split('-').join(" ")
-                // toast.error(split)
+                toast.error(split)
             })
 
     }
@@ -73,17 +85,14 @@ const Register = () => {
         //     })
 
     }
-    // const handleGoogleLogin = () => {
-
-    //     googleLogin()
-    //         .then(res => {
-
-    //             navigate(state || "/")
-    //         })
-    //         .then(err => {
-
-    //         })
-    // }
+    const handleGoogleLogin = () => {
+        signInWithGoogle()
+            .then(res => {
+                navigate("/")
+            })
+            .then(err => {
+            })
+    }
     return (
         <div className="flex justify-center">
             <ToastContainer />
@@ -153,7 +162,7 @@ const Register = () => {
                 </form>
                 <div className="flex pt-4 mt-4 border-t-2">
                     <button
-                        // onClick={handleGoogleLogin}
+                        onClick={handleGoogleLogin}
                         className="flex justify-center items-center  rounded-sm w-full  py-3 text-xl font-semibold bg-[#D4AF37] hover:shadow-xl duration-300">
                         <img className="w-7" src="https://img.icons8.com/?size=100&id=17950&format=png&color=000000" alt="" />
                         oogle

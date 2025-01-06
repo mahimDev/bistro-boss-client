@@ -3,8 +3,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
 import useAuth from "../../Hooks/useAuth";
 import { toast, ToastContainer } from "react-toastify";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 const Login = () => {
-    const { user, loginUser, } = useAuth()
+    const { user, loginUser, signInWithGoogle } = useAuth()
+    const axiosPublic = useAxiosPublic()
     const navigate = useNavigate()
     const location = useLocation()
     // console.log(location.state)
@@ -22,7 +24,7 @@ const Login = () => {
             .then(res => {
                 navigate(location?.state || '/')
                 toast.success('Login successful')
-                console.log(res.user)
+                // console.log(res.user)
             })
             .catch(err => {
                 console.log(err)
@@ -35,6 +37,25 @@ const Login = () => {
             setDisable(false)
         }
 
+    }
+    const handleGoogleLogin = () => {
+        signInWithGoogle()
+            .then(res => {
+
+                const userInfo = {
+                    user_name: res.user?.displayName,
+                    user_email: res.user?.email
+                }
+                axiosPublic.post('/user', userInfo)
+                    .then(res => {
+                        console.log(res.data)
+                        navigate(location?.state || '/')
+                    })
+
+
+            })
+            .then(err => {
+            })
     }
     return (
         <div className="flex justify-center">
@@ -84,7 +105,7 @@ const Login = () => {
                 </form>
                 <div className="flex pt-4 mt-4 border-t-2">
                     <button
-                        // onClick={handleGoogleLogin}
+                        onClick={handleGoogleLogin}
                         className="flex justify-center items-center  rounded-sm w-full  py-3 text-xl font-semibold bg-[#D4AF37] hover:shadow-xl duration-300">
                         <img className="w-7" src="https://img.icons8.com/?size=100&id=17950&format=png&color=000000" alt="" />
                         oogle

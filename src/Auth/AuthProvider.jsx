@@ -1,12 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import auth from "../Firebase/firebase";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import useAxiosPublic from '../Hooks/useAxiosPublic'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 
 export const AuthContext = createContext(null)
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-
+    const axiosPublic = useAxiosPublic()
+    const googleProvider = new GoogleAuthProvider()
     // create the user useing firebase authentication
     const createUser = (email, password) => {
         setLoading(true)
@@ -23,6 +25,11 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signInWithEmailAndPassword(auth, email, password)
     }
+    // singin with google
+    const signInWithGoogle = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider)
+    }
     // logout the user using firebase authentication
     const signOutUser = () => {
         setLoading(true)
@@ -30,21 +37,34 @@ const AuthProvider = ({ children }) => {
     }
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
-            // console.log(currentUser)
+            if (currentUser) {
+                // get token and store client
+                const userInfo = { email: currentUser.email }
+                axiosPublic.post('/jwt', userInfo)
+                    .then(res => {
+                        if (res.data.token) {
+                            localStorage.setItem('access-token', res.data.token)
+                        }
+                    })
+            } else {
+                // todo : remove cookies
+                localStorage.removeItem('access-token')
+            }
             setUser(currentUser)
             setLoading(false)
         })
         return () => {
             return unSubscribe()
         }
-    }, [])
+    }, [axiosPublic])
     const authInfo = {
         user,
         loading,
         createUser,
         loginUser,
         signOutUser,
-        updateUserProfile
+        updateUserProfile,
+        signInWithGoogle
     }
     return (
         <AuthContext.Provider value={authInfo}>
