@@ -1,17 +1,20 @@
-import { useForm } from "react-hook-form";
+import { useLoaderData } from "react-router-dom";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import { useState } from "react";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import { useState } from "react";
-import Swal from "sweetalert2";
+
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
-const AddItems = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
+const UpdateItem = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const axiosPublic = useAxiosPublic()
     const axiosSecure = useAxiosSecure()
+    const { name, price, category, image, recipe, _id } = useLoaderData()
     const { register, handleSubmit } = useForm()
     const onSubmit = async (data) => {
         try {
@@ -31,17 +34,18 @@ const AddItems = () => {
                     price: data.price,
                     recipe: data.recipe,
                 }
-                const menuRes = await axiosSecure.post('/menu', menuItem)
-                if (menuRes.data.insertedId) {
 
+                const menuRes = await axiosSecure.patch(`/menu/${_id}`, menuItem)
+                if (menuRes.data.modifiedCount > 0) {
                     Swal.fire({
                         position: 'top-start',
                         icon: 'success',
                         iconColor: 'orange',
-                        title: `${data.name} is added successfully`,
+                        title: `${data.name} is updated successfully`,
                         showConfirmButton: false,
                         timer: 2000
                     })
+
                 }
             }
         } finally {
@@ -52,7 +56,8 @@ const AddItems = () => {
 
     return (
         <div>
-            <SectionTitle subTitle={"what's new?"} title="ADD an items"></SectionTitle>
+            <SectionTitle subTitle='Refresh info' title="Update Item"></SectionTitle>
+
             <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -61,6 +66,7 @@ const AddItems = () => {
                             <span className="label-text">Recipe Name *</span>
                         </div>
                         <input
+                            defaultValue={name}
                             {...register("name")}
                             type="text"
                             placeholder="Type here"
@@ -75,7 +81,7 @@ const AddItems = () => {
                                 <span className="label-text">Category *</span>
                             </div>
                             <select {...register("category")}
-                                // defaultValue={"default"}
+                                defaultValue={category}
                                 className="select select-bordered w-full">
                                 <option disabled>select a category</option>
                                 <option value="dessert">dessert</option>
@@ -91,6 +97,7 @@ const AddItems = () => {
                                 <span className="label-text">Price *</span>
                             </div>
                             <input
+                                defaultValue={price}
                                 {...register("price")}
                                 type="text"
                                 placeholder="Type here"
@@ -104,6 +111,7 @@ const AddItems = () => {
                             <span className="label-text">Recipe Details *</span>
                         </div>
                         <textarea
+                            defaultValue={recipe}
                             {...register("recipe", { required: "Recipe details are required" })}
                             className="w-full border rounded-lg p-4"
                             placeholder="Type here"
@@ -114,6 +122,7 @@ const AddItems = () => {
                     </div>
                     <div>
                         <input
+
                             {...register("image")}
                             type="file"
                             className="file-input file-input-bordered w-full max-w-xs mt-5" />
@@ -123,7 +132,7 @@ const AddItems = () => {
                         className={`py-3 px-10 font-semibold mt-5 rounded-md ${isSubmitting ? "bg-gray-400" : "bg-orange-500"
                             }`}
                     >
-                        {isSubmitting ? "Submitting..." : "ADD ITEM"}
+                        {isSubmitting ? "Submitting..." : "UPDATE ITEM"}
                     </button>
                 </form>
             </div>
@@ -131,4 +140,4 @@ const AddItems = () => {
     );
 };
 
-export default AddItems;
+export default UpdateItem;
