@@ -3,18 +3,27 @@ import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
 import { toast } from "react-toastify";
 import useCart from "../../../Hooks/useCart";
+import useAdmin from "../../../Hooks/useAdmin";
 
 const NavBer = () => {
     const { user, signOutUser } = useAuth()
+    const [isAdmin] = useAdmin()
     const [open, setOpen] = useState(false)
     const [cart] = useCart()
     const nav = <>
         <NavLink to={'/'}> <li>Home</li></NavLink>
         <NavLink to={'menu'}><li>Our Menu</li></NavLink>
         <NavLink to={'order/dessert'}><li>Order</li></NavLink>
-        <NavLink to={'/dashboard/cart'}><li>Dashboard</li></NavLink>
+        {/* <NavLink to={'/dashboard/cart'}><li>Dashboard</li></NavLink> */}
         {/* <NavLink to={'register'}><li>Register</li></NavLink> */}
-
+        {user ?
+            isAdmin ?
+                <NavLink to={'/dashboard/adminHome'}><li>Dashboard</li></NavLink>
+                :
+                <NavLink to={'/dashboard/userHome'}><li>Dashboard</li></NavLink>
+            :
+            ""
+        }
     </>
     const handleLogout = () => {
         signOutUser()

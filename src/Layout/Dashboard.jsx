@@ -3,12 +3,14 @@ import { FaBookBookmark, FaUserGroup } from "react-icons/fa6";
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../Hooks/useCart";
 import useAdmin from "../Hooks/useAdmin";
+import { ToastContainer } from "react-toastify";
 
 const Dashboard = () => {
     const [isAdmin] = useAdmin()
     const [cart] = useCart()
     return (
         <div className="flex">
+            <ToastContainer />
             <div className="w-64 min-h-screen bg-orange-600/75 ">
                 <ul className="p-4">
                     {
@@ -34,7 +36,7 @@ const Dashboard = () => {
                             :
                             <>
 
-                                <li><NavLink className={'flex gap-2 items-center p-3'} to={'/dashboard/home'}>
+                                <li><NavLink className={'flex gap-2 items-center p-3'} to={'/dashboard/userHome'}>
                                     <FaHome></FaHome>
                                     User Home</NavLink></li>
                                 <li><NavLink className={'flex gap-2 items-center p-3'} to={'/dashboard/cart'}>
@@ -46,7 +48,7 @@ const Dashboard = () => {
                                 <li><NavLink className={'flex gap-2 items-center p-3'} to={'/dashboard/review'}>
                                     <FaRedRiver></FaRedRiver>
                                     Add Review</NavLink></li>
-                                <li><NavLink className={'flex gap-2 items-center p-3'} to={'/dashboard/booking'}>
+                                <li><NavLink className={'flex gap-2 items-center p-3'} to={'/dashboard/paymentHistory'}>
                                     <FaBookBookmark></FaBookBookmark>
                                     My Booking</NavLink></li>
                             </>

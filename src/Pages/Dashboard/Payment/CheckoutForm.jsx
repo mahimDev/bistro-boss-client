@@ -3,23 +3,28 @@ import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useCart from "../../../Hooks/useCart";
 import useAuth from "../../../Hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = () => {
     const [error, setError] = useState('')
     const [clientSecret, setClientSecret] = useState("")
     const [transactionId, setTransactionId] = useState('')
+    const navigate = useNavigate()
     const stripe = useStripe()
     const elements = useElements()
     const axiosSecure = useAxiosSecure()
-    const [cart] = useCart()
+    const [cart, refetch] = useCart()
     const { user } = useAuth()
     const amount = cart.reduce((total, item) => total + item.menu_price, 0)
 
     useEffect(() => {
-        axiosSecure.post('/create-payment-intent', { price: amount })
-            .then(res => {
-                setClientSecret(res.data.clientSecret)
-            })
+        if (amount > 0) {
+            axiosSecure.post('/create-payment-intent', { price: amount })
+                .then(res => {
+                    setClientSecret(res.data.clientSecret)
+                })
+        }
     }, [axiosSecure, amount])
     // console.log(clientSecret)
     const handleSubmit = async e => {
@@ -64,13 +69,18 @@ const CheckoutForm = () => {
                     name: user?.displayName,
                     price: amount,
                     date: new Date(),
-                    transactionId,
+                    transactionId: paymentIntent.id,
                     cartIds: cart.map(item => item._id),
                     menu_ids: cart.map(item => item.menu_id),
                     status: "pending"
                 }
                 const res = await axiosSecure.post('/payment', payment)
                 console.log(res.data)
+                refetch()
+                if (res.data?.paymentResult?.insertedId) {
+                    toast.success(`Your payment was successfully`)
+                    navigate('/dashboard/paymentHistory')
+                }
 
             }
         }

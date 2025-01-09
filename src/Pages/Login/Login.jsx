@@ -27,9 +27,9 @@ const Login = () => {
                 // console.log(res.user)
             })
             .catch(err => {
-                console.log(err)
+
             })
-        console.log(email, password)
+
     }
     const handleValidation = () => {
         const captchaValue = captchaRef.current.value
@@ -48,7 +48,7 @@ const Login = () => {
                 }
                 axiosPublic.post('/user', userInfo)
                     .then(res => {
-                        console.log(res.data)
+
                         navigate(location?.state || '/')
                     })
 
