@@ -104,7 +104,7 @@ const router = createBrowserRouter([
                     <AdminRoute>
                         <UpdateItem></UpdateItem>
                     </AdminRoute>,
-                loader: ({ params }) => fetch(`http://localhost:3000/menu/${params.id}`)
+                loader: ({ params }) => fetch(`https://bistro-boss-server-swart-nine.vercel.app/menu/${params.id}`)
             },
         ]
     }
